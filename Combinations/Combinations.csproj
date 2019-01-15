@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Combination.cs" />
     <Compile Include="Combinator.cs" />
     <Compile Include="CombinatorEnumerator.cs" />
     <Compile Include="Math.cs" />
