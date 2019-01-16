@@ -16,8 +16,8 @@ namespace CombinationsConsole
             // Arrange
             //
 
-            int totalNumbers = 10;
-            int combinationNumbers = 9;
+            int totalNumbers = 49;
+            int combinationNumbers = 6;
 
             Combinator cmb = new Combinator(totalNumbers, combinationNumbers);
 
@@ -29,16 +29,9 @@ namespace CombinationsConsole
 
             BigInteger i = 0;
 
-            foreach (int[] combination in cmb)
+            foreach (Combination combination in cmb)
             {
-                StringBuilder toReturn = new StringBuilder();
-
-                for (int n = 1; n < combination.Length; n++)
-                {
-                    toReturn.Append(combination[n].ToString("## ") + " ");
-                }
-
-                Console.WriteLine(toReturn.ToString());
+                Console.WriteLine(combination);
 
                 i++;
             }

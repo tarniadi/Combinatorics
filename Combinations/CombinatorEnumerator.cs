@@ -12,12 +12,12 @@ namespace Combinations
         public int CombinedElements { get; set; }
 
         private int[] Elements { get; set; }           
-        private int[] Combination { get; set; }
-        private int[] Temp { get; set; }
+        private Combination CurrentCombination { get; set; }
+        private Combination TempCombination { get; set; }
 
 
-        private int[] Max { get; set; }
-        private int[] Min { get; set; }
+        private Combination MaxCombination { get; set; }
+        private Combination MinCombination { get; set; }
 
         public bool Finished { get; set; }
 
@@ -35,22 +35,22 @@ namespace Combinations
                 Elements[x] = x;
             }
 
-            Combination = new int[CombinedElements + 1];
+            CurrentCombination = new Combination(CombinedElements);
 
-            Min = new int[CombinedElements + 1];
-            Max = new int[CombinedElements + 1];
+            MinCombination = new Combination(CombinedElements);
+            MaxCombination = new Combination(CombinedElements);
 
             for (int x = 1; x <= CombinedElements; x++)
             {
-                Combination[x] = x;
-                Min[x] = x;
+                CurrentCombination[x] = x;
+                MinCombination[x] = x;
             }
 
-            int v = Combination.Length - 2;
+            int v = CurrentCombination.Length - 2;
 
-            for (int x = 1; x <= Combination.Length - 1; x++)
+            for (int x = 1; x <= CurrentCombination.Length - 1; x++)
             {
-                Max[x] = (Elements[TotalElements - v]);
+                MaxCombination[x] = (Elements[TotalElements - v]);
                 v--;
             }
 
@@ -63,41 +63,38 @@ namespace Combinations
         {
             if (Finished) return false;   //End of process
 
-            if (Combination[Combination.Length - 1] == Min[Min.Length - 1])
+            if (CurrentCombination[CurrentCombination.Length - 1] == MinCombination[MinCombination.Length - 1])
             {
                 Finished = false;
 
-                Temp = new int[CombinedElements + 1];
-                Array.Copy(Combination, Temp, Combination.Length);
-                Current = Temp;
+                TempCombination = Combination.Create(CurrentCombination);
+                Current = TempCombination;
 
-                Combination[Combination.Length - 1]++;
+                CurrentCombination[CurrentCombination.Length - 1]++;
 
                 return true;
             }
 
-            if (Combination[1] >= Max[1])
+            if (CurrentCombination[1] >= MaxCombination[1])
             {
                 Finished = true;
 
-                Temp = new int[CombinedElements + 1];
-                Array.Copy(Combination, Temp, Combination.Length);
-                Current = Temp;
+                TempCombination = Combination.Create(CurrentCombination);
+                Current = TempCombination;
 
                 return true;
             }      //last location (which is first element)
 
-            Temp = new int[CombinedElements + 1];
-            Array.Copy(Combination, Temp, Combination.Length);
-            Current = Temp;
+            TempCombination = Combination.Create(CurrentCombination);
+            Current = TempCombination;
 
             //----------------------------------------------------------------------------
-            if (Combination[CP] == Max[CP])
+            if (CurrentCombination[CP] == MaxCombination[CP])
             {
                 //------------------------------------------------------------------------
                 //Loop & step down TC till find CombAry[] != Max[]
                 //------------------------------------------------------------------------
-                while (Combination[CP] == Max[CP])
+                while (CurrentCombination[CP] == MaxCombination[CP])
                 {
                     CP--;
                 }
@@ -106,16 +103,16 @@ namespace Combinations
                 //[TC] one step then re-adjust all next elements from location (TC) upto 
                 //last location (CombArySZ),,  Or Advance element at [TC] one Step directly
                 //-------------------------------------------------------------------------
-                int Loc = Combination[CP];
+                int Loc = CurrentCombination[CP];
 
-                if (Combination[CP] + 1 == Max[CP])
+                if (CurrentCombination[CP] + 1 == MaxCombination[CP])
 
-                    Combination[CP] = ++Loc;
+                    CurrentCombination[CP] = ++Loc;
 
                 else
                     for (int t = CP; t <= CombinedElements; t++)
                     {
-                        Combination[t] = ++Loc;
+                        CurrentCombination[t] = ++Loc;
                     }
                 //-------------------------------------------------------------------------
                 //after this element readjustment, alwayes TC must be reset to 
@@ -127,7 +124,7 @@ namespace Combinations
             }
             else
             {
-                Combination[CP]++;
+                CurrentCombination[CP]++;
 
                 // the new combination result has been generated, that you can display or store.
             }
@@ -139,9 +136,9 @@ namespace Combinations
         {
             StringBuilder toReturn = new StringBuilder();
 
-            for (int n = 1; n < Combination.Length; n++)
+            for (int n = 1; n < CurrentCombination.Length; n++)
             {
-                toReturn.Append(Combination[n].ToString("## ") + " ");
+                toReturn.Append(CurrentCombination[n].ToString("## ") + " ");
             }
 
             return toReturn.ToString();
@@ -151,7 +148,7 @@ namespace Combinations
         {
             for (int x = 1; x <= CombinedElements; x++)
             {
-                Combination[x] = x;
+                CurrentCombination[x] = x;
             }
 
             CP = CombinedElements;
